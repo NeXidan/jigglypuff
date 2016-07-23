@@ -1,1 +1,1 @@
-web: ./script.sh
+web: ./setup.sh
