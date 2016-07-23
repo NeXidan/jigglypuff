@@ -9,10 +9,11 @@ sys.path.append(utils.path(__file__, '../../modules/PokemonGoMap'))
 import example
 
 class Searcher():
-    def __init__(self, location, callback):
+    def __init__(self, location, handler, step):
         self.location = location
+        self.step = step
 
-        example.process_step = utils.override(example.process_step, callback)
+        example.process_step = utils.override(example.process_step, handler)
         example.get_args = self.get_args
         example.register_background_thread = self.register_background_thread
 
@@ -30,21 +31,18 @@ class Searcher():
 
     def register_background_thread(self, initial_registration=False):
         if not initial_registration:
+            example.FLOAT_LAT = None
+            example.FLOAT_LONG = None
             return
-
-        example.search_thread = threading.Thread(target = example.main)
-
-        example.search_thread.daemon = True
-        example.search_thread.name = 'search_thread'
-        example.search_thread.start()
+        example.main()
 
     def get_args(self):
         args = copy.copy(consts.SEARCHER['ARGS']);
 
         args.location = self.location.toString()
+        args.step_limit = self.step
 
         args.password = 'asdfg987'
-        args.step_limit = '3'
         args.username = 'Dimitrinol'
 
         return args

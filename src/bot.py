@@ -24,15 +24,25 @@ class Bot():
         self.bot.sendSticker(self.chatId, consts.BOT['STICKER'])
         self.bot.sendMessage(self.chatId, 'Jigglypuff is so sorry')
 
-    def location(self, msg):
-        Map(
-            location = msg['location'],
-            callback = self.sendPhoto,
-            zoom = 15
+    def location(self, msg, step = 4):
+        maxStep = step ** 2
+        reply = (
+            self.chatId,
+            self.bot.sendMessage(self.chatId, consts.BOT['LOCATION']['REPLY'] % (0, maxStep), parse_mode = 'Markdown')['message_id']
         )
 
-    def sendPhoto(self, image):
-        path = utils.path(__file__, '../tmp/' + str(self.chatId) + '.png')
-        image.save(path, 'PNG')
-        with open(path, 'rb') as imageFile:
-            self.bot.sendPhoto(self.chatId, imageFile)
+        def handler(pokemons, image = None, current = 0):
+            self.bot.editMessageText(reply, consts.BOT['LOCATION']['REPLY'] % (current, maxStep), parse_mode = 'Markdown')
+            if image is not None:
+                path = utils.path(__file__, '../tmp/' + str(self.chatId) + '.png')
+                image.save(path, 'PNG')
+                with open(path, 'rb') as imageFile:
+                    self.bot.sendPhoto(self.chatId, imageFile)
+
+
+
+        Map(
+            location = msg['location'],
+            callback = handler,
+            step = step
+        )
