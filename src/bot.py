@@ -1,8 +1,7 @@
 import telepot
 
-from libs import utils
+from libs import utils, consts
 from map import Map
-import consts
 
 class Bot():
     bot = telepot.Bot(consts.BOT['TOKEN'])
@@ -13,6 +12,8 @@ class Bot():
     def message(self, msg):
         contentType, chatType, chatId = telepot.glance(msg)
 
+        self.chatId = chatId;
+
         if not hasattr(self, contentType):
             self.unknown(msg);
             return
@@ -20,16 +21,17 @@ class Bot():
         getattr(self, contentType)(msg)
 
     def unknown(self, msg):
-        chatId = msg['chat']['id']
-
-        self.bot.sendSticker(chatId, consts.BOT['STICKER'])
-        self.bot.sendMessage(chatId, 'Jigglypuff is so sorry')
+        self.bot.sendSticker(self.chatId, consts.BOT['STICKER'])
+        self.bot.sendMessage(self.chatId, 'Jigglypuff is so sorry')
 
     def location(self, msg):
-        self.map = Map(msg['location'])
-        path = utils.path('tmp/' + str(msg['chat']['id']) + '.png')
+        Map(
+            location = msg['location'],
+            callback = self.sendPhoto
+        )
 
-        self.map.image.save(path, 'PNG')
-
-        with open(path, 'rb') as image:
-            self.bot.sendPhoto(msg['chat']['id'], image, utils.locationToString(self.map.location))
+    def sendPhoto(self, image):
+        path = utils.path(__file__, '../tmp/' + str(self.chatId) + '.png')
+        image.save(path, 'PNG')
+        with open(path, 'rb') as imageFile:
+            self.bot.sendPhoto(self.chatId, imageFile)
