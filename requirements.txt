@@ -1,3 +1,2 @@
 telepot==8.3
 Pillow==3.3.0
-pyproj

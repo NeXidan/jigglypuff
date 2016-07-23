@@ -41,7 +41,7 @@ class Searcher():
     def get_args(self):
         args = copy.copy(consts.SEARCHER['ARGS']);
 
-        args.location = utils.locationToString(self.location, googleWay = True)
+        args.location = self.location.toString()
 
         args.password = 'asdfg987'
         args.step_limit = '3'

@@ -1,40 +1,25 @@
+from __future__ import division
 import os
-from pyproj import Proj, transform
 
-def locationToString(location, separator = ',', googleWay = False):
-    if googleWay:
-        return str(location['latitude']) + separator + str(location['longitude'])
+from geom.point import Point
+from geom.merc import Projection
 
-    return str(location['longitude']) + separator + str(location['latitude'])
+def buildOffset(point, center, size, zoom):
+    scale = 2**zoom
 
-def toLocation(longitude, latitude):
-    return {
-        'longitude': longitude,
-        'latitude': latitude
-    }
+    point = Projection.fromLocationToPoint(point)
+    center = Projection.fromLocationToPoint(center)
+    corner = Point(
+        center.x - (size.getRealWidth() / 2) / scale,
+        center.y + (size.getRealHeight() / 2) / scale
+    )
 
-def buildOffset(point, box, size):
-    mercBox = (toMerc(box[0]), toMerc(box[1]))
-    spn = (abs(mercBox[0][0] - mercBox[1][0]), abs(mercBox[0][0] - mercBox[1][0]))
+    spn = (2 * abs(center.x - corner.x), 2 * abs(center.y - corner.y));
 
-    mercPoint = toMerc(point)
-
-    left = (size['width'] * (mercPoint[0] - mercBox[0][0])) / spn[0]
-    top = (size['height'] * (mercBox[1][1] - mercPoint[1])) / spn[1]
+    left = (size.width * (point.x - corner.x)) / spn[0]
+    top = (size.height * (point.y - corner.y + spn[1])) / spn[1]
 
     return (int(left), int(top))
-
-def boxToString(box):
-    return str(box[0]['longitude']) \
-        + ',' + str(box[0]['latitude']) \
-        + '~' + str(box[1]['longitude']) \
-        + ',' + str(box[1]['latitude'])
-
-def buildBox(center, spn):
-    bottomLeft = toLocation(center['longitude'] - spn / 2, center['latitude'] - spn / 2)
-    topRight = toLocation(center['longitude'] + spn / 2, center['latitude'] + spn / 2)
-
-    return (bottomLeft, topRight)
 
 def path(filePath, relativePath):
     return os.path.join(os.path.dirname(filePath), relativePath)
@@ -45,10 +30,3 @@ def override(oldMethod, newMethod):
         newMethod()
 
     return overrideMethod
-
-lonlat = Proj(init="epsg:4326")
-merc = Proj(proj="merc", ellps="WGS84")
-
-def toMerc(point, googleCoords = False):
-    ll = (point['longitude'], point['latitude'])
-    return transform(lonlat, merc, *ll)

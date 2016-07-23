@@ -27,7 +27,8 @@ class Bot():
     def location(self, msg):
         Map(
             location = msg['location'],
-            callback = self.sendPhoto
+            callback = self.sendPhoto,
+            zoom = 15
         )
 
     def sendPhoto(self, image):

@@ -5,20 +5,20 @@ from PIL import Image
 from libs import utils, consts
 from libs.searcher import Searcher
 
-SPN = 0.01;
+from libs.geom.location import Location
 
 class Map():
-    def __init__(self, location, callback):
-        self.location = location
+    def __init__(self, location, callback, zoom):
+        self.location = Location.fromTelegramLocation(location)
+        self.zoom = zoom
         self.callback = callback
 
-        locationString = utils.locationToString(self.location)
-
-        self.box = utils.buildBox(location, SPN)
+        locationString = self.location.toString()
 
         data = {
-            'bbox': utils.boxToString(self.box),
-            'pt': locationString + ',pm2rdm'
+            'zoom': zoom,
+            'center': locationString,
+            'markers': locationString
         }
 
         data.update(consts.MAP['API']['PARAMS'])
@@ -49,9 +49,10 @@ class Map():
             .convert('RGBA')
 
         offset = utils.buildOffset(
-            point = utils.toLocation(pokemon['lng'], pokemon['lat']),
-            box = self.box,
-            size = consts.SIZE
+            point = Location.fromPokemonLocation(pokemon),
+            center = self.location,
+            size = consts.SIZE,
+            zoom = self.zoom
         )
 
         image.paste(
