@@ -5,9 +5,8 @@ import threading
 import utils
 import consts
 
-import imp
-
-example = imp.load_source('example', utils.path(__file__, '../../modules/PokemonGoMap'))
+sys.path.append(utils.path(__file__, '../../modules/PokemonGoMap'))
+import example
 
 class Searcher():
     def __init__(self, location, handler, step):
