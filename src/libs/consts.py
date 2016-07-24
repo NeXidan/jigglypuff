@@ -23,7 +23,7 @@ MAP = {
         }
     },
 
-    'ZOOM': 19
+    'ZOOM': 15
 }
 
 SEARCHER = {

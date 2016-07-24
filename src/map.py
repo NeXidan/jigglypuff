@@ -8,17 +8,15 @@ from libs.searcher import Searcher
 from libs.geom.location import Location
 
 class Map():
-    current = 0
-
     def __init__(self, location, callback, step):
-        self.location = Location.fromTelegramLocation(location)
+        self.location = Location.factory(location)
         self.step = step
         self.callback = callback
 
         locationString = self.location.toString()
 
         data = {
-            'zoom': consts.MAP['ZOOM'] - self.step,
+            'zoom': consts.MAP['ZOOM'],
             'center': locationString,
             'markers': locationString
         }
@@ -29,27 +27,23 @@ class Map():
         response.raw.decode_content = True
         self.image = Image.open(response.raw).convert('RGBA')
 
-        self.searcher = Searcher(
+        Searcher(
             location = self.location,
             handler = self.handler,
             step = self.step
-        )
+        ).search()
 
-        self.searcher.call('register_background_thread', initial_registration=True)
 
-    def handler(self):
-        pokemons = self.searcher.get('pokemons')
-
+    def handler(self, pokemons, currSteps, totalSteps):
         image = None
-        self.current += 1
-        if self.current == self.step**2:
+        if currSteps == totalSteps:
             image = self.drawImage(pokemons)
 
-        self.callback(pokemons, image, self.current)
+        self.callback(pokemons, image, currSteps, totalSteps)
 
     def drawImage(self, pokemons):
         image = self.image.copy()
-        for key, pokemon in pokemons.iteritems():
+        for pokemon in pokemons:
             self.drawPokemon(image, pokemon)
 
         return image
@@ -60,10 +54,10 @@ class Map():
             .convert('RGBA')
 
         offset = utils.buildOffset(
-            point = Location.fromPokemonLocation(pokemon),
+            point = Location.factory(pokemon),
             center = self.location,
             size = consts.SIZE,
-            zoom = consts.MAP['ZOOM'] - self.step
+            zoom = consts.MAP['ZOOM']
         )
 
         image.paste(

@@ -7,9 +7,5 @@ class Location:
         return str(self.latitude) + separator + str(self.longitude)
 
     @staticmethod
-    def fromTelegramLocation(location):
+    def factory(location):
         return Location(location['latitude'], location['longitude'])
-
-    @staticmethod
-    def fromPokemonLocation(location):
-        return Location(location['lat'], location['lng'])
