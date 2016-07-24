@@ -1,11 +1,19 @@
+import sys
+
 from src.bot import Bot
 
-def main():
-    bot = Bot()
+from src.libs import utils
+path = utils.path(__file__, 'modules/PokemonGoMap')
+sys.path.append(path)
 
+import pogom
+
+pogom.models.create_tables()
+pogom.config['ROOT_PATH'] = path
+
+def main():
     try:
-        while 1:
-            pass
+        Bot.start()
     except KeyboardInterrupt:
         return
 

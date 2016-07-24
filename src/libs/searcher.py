@@ -7,17 +7,11 @@ from s2sphere import LatLng
 import utils
 import consts
 
-pogomPath = utils.path(__file__, '../../modules/PokemonGoMap')
-
-sys.path.append(pogomPath)
+sys.path.append(utils.path(__file__, '../../modules/PokemonGoMap'))
 
 import pogom.search
 import pogom.utils
-from pogom import config
-from pogom.models import Pokemon, create_tables
-
-create_tables()
-config['ROOT_PATH'] = pogomPath
+from pogom.models import Pokemon
 
 class Searcher():
     def __init__(self, location, handler, step):
