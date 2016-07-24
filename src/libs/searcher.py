@@ -8,12 +8,14 @@ import consts
 sys.path.append(utils.path(__file__, '../../modules/PokemonGoMap'))
 import example
 
+process_step = example.process_step
+
 class Searcher():
     def __init__(self, location, handler, step):
         self.location = location
         self.step = step
 
-        example.process_step = utils.override(example.process_step, handler)
+        example.process_step = utils.override(process_step, handler)
         example.get_args = self.get_args
         example.register_background_thread = self.register_background_thread
 
