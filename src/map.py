@@ -1,5 +1,6 @@
 import requests
 
+from io import BytesIO
 from PIL import Image
 
 from libs import utils, consts
@@ -25,7 +26,7 @@ class Map():
 
         response = requests.get(consts.MAP['API']['URL'], data, stream=True)
         response.raw.decode_content = True
-        self.image = Image.open(response.raw).convert('RGBA')
+        self.image = Image.open(BytesIO(response.content)).convert('RGBA')
 
         Searcher(
             location = self.location,
