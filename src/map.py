@@ -36,7 +36,7 @@ class Map():
 
     def handler(self, pokemons, curr_steps, total_steps):
         image = None
-        if curr_steps == total_steps:
+        if pokemons:
             image = self.draw_image(pokemons)
 
         self.callback(pokemons, image, curr_steps, total_steps)

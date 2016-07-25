@@ -29,7 +29,7 @@ class Searcher():
         position = (self.location.latitude, self.location.longitude, 0)
 
         if pogom.search.api._auth_provider and pogom.search.api._auth_provider._ticket_expire:
-            remaining_time = pogom.search.api._auth_provider._ticket_expire/1000 - time.time()
+            remaining_time = pogom.search.api._auth_provider._ticket_expire / 1000 - time.time()
 
             if remaining_time < 60:
                 pogom.search.login(args, position)
@@ -44,38 +44,39 @@ class Searcher():
 
         for step, step_location in enumerate(pogom.search.generate_location_steps(position, num_steps), 1):
             search_args = (0, total_steps, step_location, step, sem)
-            search_threads.append(Thread(target=pogom.search.search_thread, name='search_step_thread {}'.format(step), args=(search_args, )))
+            search_thread = Thread(
+                target = pogom.search.search_thread,
+                name = 'search_step_thread {}'.format(step),
+                args = (search_args, )
+            )
+            search_thread.start()
+            search_threads.append(search_thread)
 
-            if step % max_threads == 0:
-                curr_steps = self.process_search_threads(search_threads, curr_steps, total_steps)
-                search_threads = []
+            while len(search_threads) == max_threads:
+                for thread in search_threads:
+                    if not thread.is_alive():
+                        search_threads.remove(thread)
+                        curr_steps += 1
+                        self.handler(None, curr_steps, total_steps)
 
-        if search_threads:
-            self.process_search_threads(search_threads, curr_steps, total_steps)
-
-    def process_search_threads(self, search_threads, curr_steps, total_steps):
-        for thread in search_threads:
-            thread.start()
         for thread in search_threads:
             curr_steps += 1
             thread.join()
-            self.handler(self.get_pokemons(), curr_steps, total_steps)
-        return curr_steps
-
-        # args.password = 'asdfg987'
-        # args.username = 'Dimitrinol'
+            self.handler(self.get_pokemons() if curr_steps == total_steps else None, curr_steps, total_steps)
 
     def get_pokemons(self):
         pokemon_list = []
+        origin_point = LatLng.from_degrees(self.location.latitude, self.location.longitude)
         for pokemon in Pokemon.get_active():
             pokemon_point = LatLng.from_degrees(pokemon['latitude'], pokemon['longitude'])
             entry = {
                 'id': pokemon['pokemon_id'],
                 'name': pokemon['pokemon_name'],
-                # 'time_to_disappear': '%dm %ds' % (divmod((pokemon['disappear_time']-datetime.utcnow()).seconds, 60)),
+                'distance': int(origin_point.get_distance(pokemon_point).radians * 6366468.241830914),
                 'latitude': pokemon['latitude'],
                 'longitude': pokemon['longitude']
             }
-            pokemon_list.append(entry)
-        # pokemon_list = [y[0] for y in sorted(pokemon_list, key=lambda x: x[1])]
-        return pokemon_list
+
+            pokemon_list.append((entry, entry['distance']))
+
+        return [pokemon[0] for pokemon in sorted(pokemon_list, key = lambda pokemon: pokemon[1])]

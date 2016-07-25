@@ -28,7 +28,7 @@ class Bot(telepot.helper.ChatHandler):
     def location(self, msg, step = 5):
         reply = telepot.message_identifier(self.sender.sendMessage(consts.BOT['LOCATION']['REPLY'] % (0, 0), parse_mode = 'Markdown'))
 
-        def handler(pokemons, image = None, current_steps = 0, total_steps = 0):
+        def handler(pokemons = None, image = None, current_steps = 0, total_steps = 0):
             self.bot.editMessageText(reply, consts.BOT['LOCATION']['REPLY'] % (current_steps, total_steps), parse_mode = 'Markdown')
             if image is not None:
                 path = utils.path(__file__, '../tmp/' + str(self.chat_id) + '.png')
