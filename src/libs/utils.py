@@ -1,17 +1,18 @@
 from __future__ import division
 import os
+import argparse
 
 from geom.point import Point
 from geom.merc import Projection
 
-def buildOffset(point, center, size, zoom):
+def build_offset(point, center, size, zoom):
     scale = 2**zoom
 
-    point = Projection.fromLocationToPoint(point)
-    center = Projection.fromLocationToPoint(center)
+    point = Projection.from_location_to_point(point)
+    center = Projection.from_location_to_point(center)
     corner = Point(
-        center.x - (size.getRealWidth() / 2) / scale,
-        center.y + (size.getRealHeight() / 2) / scale
+        center.x - (size.get_real_width() / 2) / scale,
+        center.y + (size.get_real_height() / 2) / scale
     )
 
     spn = (2 * abs(center.x - corner.x), 2 * abs(center.y - corner.y));
@@ -23,10 +24,3 @@ def buildOffset(point, center, size, zoom):
 
 def path(filePath, relativePath):
     return os.path.join(os.path.dirname(filePath), relativePath)
-
-def override(oldMethod, newMethod):
-    def overrideMethod(*kwargs):
-        oldMethod(*kwargs)
-        newMethod()
-
-    return overrideMethod

@@ -16,7 +16,7 @@ MAP = {
     'API': {
         'URL': 'https://maps.googleapis.com/maps/api/staticmap',
         'PARAMS': {
-            'size': SIZE.toString(),
+            'size': SIZE.to_string(),
             'scale': SIZE.scale
         }
     },

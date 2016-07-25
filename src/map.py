@@ -13,12 +13,12 @@ class Map():
         self.step = step
         self.callback = callback
 
-        locationString = self.location.toString()
+        location_string = self.location.to_string()
 
         data = {
             'zoom': consts.MAP['ZOOM'],
-            'center': locationString,
-            'markers': locationString
+            'center': location_string,
+            'markers': location_string
         }
 
         data.update(consts.MAP['API']['PARAMS'])
@@ -34,26 +34,26 @@ class Map():
         ).search()
 
 
-    def handler(self, pokemons, currSteps, totalSteps):
+    def handler(self, pokemons, curr_steps, total_steps):
         image = None
-        if currSteps == totalSteps:
-            image = self.drawImage(pokemons)
+        if curr_steps == total_steps:
+            image = self.draw_image(pokemons)
 
-        self.callback(pokemons, image, currSteps, totalSteps)
+        self.callback(pokemons, image, curr_steps, total_steps)
 
-    def drawImage(self, pokemons):
+    def draw_image(self, pokemons):
         image = self.image.copy()
         for pokemon in pokemons:
-            self.drawPokemon(image, pokemon)
+            self.draw_pokemon(image, pokemon)
 
         return image
 
-    def drawPokemon(self, image, pokemon):
-        pokemonImage = Image \
+    def draw_pokemon(self, image, pokemon):
+        pokemon_image = Image \
             .open(utils.path(__file__, '../modules/PokemonGoMap/static/icons/' + str(pokemon['id']) + '.png')) \
             .convert('RGBA')
 
-        offset = utils.buildOffset(
+        offset = utils.build_offset(
             point = Location.factory(pokemon),
             center = self.location,
             size = consts.SIZE,
@@ -61,10 +61,10 @@ class Map():
         )
 
         image.paste(
-            pokemonImage,
+            pokemon_image,
             (
-                offset[0] - pokemonImage.size[0] / 2,
-                offset[1] - pokemonImage.size[1] / 2
+                offset[0] - pokemon_image.size[0] / 2,
+                offset[1] - pokemon_image.size[1] / 2
             ),
-            mask = pokemonImage
+            mask = pokemon_image
         )

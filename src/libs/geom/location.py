@@ -3,7 +3,7 @@ class Location:
         self.latitude = latitude
         self.longitude = longitude
 
-    def toString(self, separator = ','):
+    def to_string(self, separator = ','):
         return str(self.latitude) + separator + str(self.longitude)
 
     @staticmethod

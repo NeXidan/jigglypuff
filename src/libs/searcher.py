@@ -21,7 +21,7 @@ class Searcher():
 
     def search(self):
         args = copy.copy(pogom.utils.get_args())
-        args.location = self.location.toString()
+        args.location = self.location.to_string()
         args.step_limit = self.step
 
         num_steps = args.step_limit
@@ -59,13 +59,13 @@ class Searcher():
         for thread in search_threads:
             curr_steps += 1
             thread.join()
-            self.handler(self.getPokemons(), curr_steps, total_steps)
+            self.handler(self.get_pokemons(), curr_steps, total_steps)
         return curr_steps
 
         # args.password = 'asdfg987'
         # args.username = 'Dimitrinol'
 
-    def getPokemons(self):
+    def get_pokemons(self):
         pokemon_list = []
         for pokemon in Pokemon.get_active():
             pokemon_point = LatLng.from_degrees(pokemon['latitude'], pokemon['longitude'])

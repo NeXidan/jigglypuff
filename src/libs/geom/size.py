@@ -4,11 +4,11 @@ class Size:
         self.height = height
         self.scale = scale
 
-    def getRealWidth(self):
+    def get_real_width(self):
         return self.width / self.scale
 
-    def getRealHeight(self):
+    def get_real_height(self):
         return self.height / self.scale
 
-    def toString(self, separator = 'x'):
-        return str(self.getRealWidth()) + separator + str(self.getRealHeight())
+    def to_string(self, separator = 'x'):
+        return str(self.get_real_width()) + separator + str(self.get_real_height())
