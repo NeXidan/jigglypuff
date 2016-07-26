@@ -7,6 +7,21 @@ BOT = {
 
     'LOCATION': {
         'REPLY': '*Jigglypuff* is searching:  `%d / %d`'
+    },
+
+    'KEYBOARD': {
+        'SHOW': {
+            'keyboard': [
+                [{
+                    'text': 'Send your location',
+                    'request_location': True
+                }]
+            ],
+            'resize_keyboard': True
+        },
+        'HIDE': {
+            'hide_keyboard': True
+        }
     }
 }
 

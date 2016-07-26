@@ -3,6 +3,7 @@ import copy
 import time
 from threading import Thread, Semaphore
 from s2sphere import LatLng
+from datetime import datetime
 
 import utils
 import consts
@@ -53,9 +54,9 @@ class Searcher():
             search_threads.append(search_thread)
 
             while len(search_threads) == max_threads:
-                for thread in search_threads:
+                for index, thread in enumerate(search_threads):
                     if not thread.is_alive():
-                        search_threads.remove(thread)
+                        del search_threads[index]
                         curr_steps += 1
                         self.handler(None, curr_steps, total_steps)
 
@@ -69,14 +70,13 @@ class Searcher():
         origin_point = LatLng.from_degrees(self.location.latitude, self.location.longitude)
         for pokemon in Pokemon.get_active():
             pokemon_point = LatLng.from_degrees(pokemon['latitude'], pokemon['longitude'])
-            entry = {
+
+            pokemon_list.append({
                 'id': pokemon['pokemon_id'],
                 'name': pokemon['pokemon_name'],
-                'distance': int(origin_point.get_distance(pokemon_point).radians * 6366468.241830914),
+                'time': '%02d:%02d' % (divmod((pokemon['disappear_time'] - datetime.utcnow()).seconds, 60)),
                 'latitude': pokemon['latitude'],
                 'longitude': pokemon['longitude']
-            }
+            })
 
-            pokemon_list.append((entry, entry['distance']))
-
-        return [pokemon[0] for pokemon in sorted(pokemon_list, key = lambda pokemon: pokemon[1])]
+        return pokemon_list

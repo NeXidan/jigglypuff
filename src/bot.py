@@ -4,6 +4,9 @@ from telepot.delegate import per_chat_id, create_open
 from libs import utils, consts
 from map import Map
 
+COMMAND_SLASH = '/'
+COMMAND_PREFIX = 'command_'
+
 class Bot(telepot.helper.ChatHandler):
     @staticmethod
     def start():
@@ -15,11 +18,10 @@ class Bot(telepot.helper.ChatHandler):
     def on_message(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
 
-        if not hasattr(self, content_type):
-            self.unknown(msg);
-            return
+        if hasattr(self, content_type):
+            return getattr(self, content_type)(msg)
 
-        getattr(self, content_type)(msg)
+        self.unknown(msg);
 
     def unknown(self, msg):
         self.sender.sendSticker(consts.BOT['STICKER'])
@@ -37,3 +39,33 @@ class Bot(telepot.helper.ChatHandler):
                     self.sender.sendPhoto(imageFile)
 
         Map(location = msg['location'], callback = handler, step = step)
+
+    def text(self, msg):
+        content = msg['text']
+
+        if content[0] == '/':
+            command = COMMAND_PREFIX + content[1:]
+
+            if hasattr(self, command):
+                return getattr(self, command)(msg)
+
+        self.unknown(msg)
+
+    def command_stop(self, msg):
+        self.sender.sendMessage('You cannot stop *Jigglypuff*', parse_mode = 'Markdown')
+
+    def command_keyboard(self, msg):
+        if not hasattr(self, 'keyboard'):
+            self.keyboard = telepot.message_identifier(self.sender.sendMessage(
+                'Use this keyboard to interact with *Jigglypuff*',
+                parse_mode = 'Markdown',
+                reply_markup = consts.BOT['KEYBOARD']['SHOW']
+            ))
+            return
+
+        self.sender.sendMessage(
+            '*Jigglypuff* will hide keyboard',
+            parse_mode = 'Markdown',
+            reply_markup = consts.BOT['KEYBOARD']['HIDE']
+        )
+        del self.keyboard

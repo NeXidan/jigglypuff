@@ -1,6 +1,6 @@
 import requests
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from libs import utils, consts
 from libs.searcher import Searcher
@@ -67,4 +67,13 @@ class Map():
                 offset[1] - pokemon_image.size[1] / 2
             ),
             mask = pokemon_image
+        )
+
+        ImageDraw.Draw(image).text(
+            (
+                offset[0] - pokemon_image.size[0] / 2,
+                offset[1] + pokemon_image.size[1] / 2
+            ),
+            pokemon['time'],
+            (0, 0, 0)
         )
