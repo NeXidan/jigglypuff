@@ -35,7 +35,7 @@ Hello, young trainer. I'm *Jigglypuff*, `Pokemon GO` helper pokebot!
 
 Quick FAQ from *Jigglypuff*:
 
-*Q:* How i can see pokemons nearby?
+*Q:* How can i see pokemons nearby?
 *A:* Just send *Jigglypuff* your location through attach media!
 
 *Q:* *Jigglypuff* is too slow! Bad pokebot!
@@ -44,7 +44,7 @@ Quick FAQ from *Jigglypuff*:
 *Q:* Searching progress is on zero. Wtf, pokebot?
 *A:* *Jigglypuff* don't know. Maybe Pokemon GO servers are down, or i'm down. Please, try later.
 
-*Q:* I get map without pokemons! I came here to cheat, you dummy pokebot.
+*Q:* I got map without pokemons! I came here to cheat, you dummy pokebot.
 *A:* Maybe your district is laggy? Launch game and check for any activities around you and `Nearby` screen.
 
 Catch em all! See ya, trainer!
