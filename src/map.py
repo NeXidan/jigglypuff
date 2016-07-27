@@ -33,7 +33,6 @@ class Map():
             step = self.step
         ).search()
 
-
     def handler(self, pokemons, curr_steps, total_steps):
         image = None
         if pokemons:
