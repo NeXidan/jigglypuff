@@ -24,7 +24,34 @@ BOT = {
         }
     },
 
-    'HELP': 'Hello, young trainer. My name is *Jigglypuff* and i would like to help you locate all pokemons near you. Here i would like to answer some quations.Let\'s start\n\n*1*.How i can recieve pokemon\'s location?:\nYou should send your lacation from media selection\n*2*.Why search perfomance is very poor?:\nCause the machine, that my master use, has a poor perfomance too.\n*3*.I sent my location, but progress still on 0. What happend?:\nProbably, Pokemon\'s servers are down,u should wait for some minutes or hours.\n*4*.When searching is over, i didn\'t get a map. Why?:\nProbably, your district is down, launch a game and check, for any pokestops and "Nearby" sceen. If u can\'t see them, there is a answer.\n\nSo, I hope you will enjoy my work and you will catch all pokemons, Good luck!!!\n\n[Source code](https://github.com/NeXidan/jigglypuff)'
+    'HELP': '''
+Hello, young trainer. I'm *Jigglypuff*, `Pokemon GO` helper pokebot!
+
+*Jigglypuff* accepts:
+    /start - starts interaction with pokebot
+    /help - shows help reference
+    /stop - stops current activity
+    /keyboard - shows keyboard
+
+Quick FAQ from *Jigglypuff*:
+
+*Q:* How i can see pokemons nearby?
+*A:* Just send *Jigglypuff* your location through attach media!
+
+*Q:* *Jigglypuff* is too slow! Bad pokebot!
+*A:* *Jigglypuff* is so sorry. My master's hardware is poor. Sometimes he puts me in a small raspberry box.
+
+*Q:* Searching progress is on zero. Wtf, pokebot?
+*A:* *Jigglypuff* don't know. Maybe Pokemon GO servers are down, or i'm down. Please, try later.
+
+*Q:* I get map without pokemons! I came here to cheat, you dummy pokebot.
+*A:* Maybe your district is laggy? Launch game and check for any activities around you and `Nearby` screen.
+
+Catch em all! See ya, trainer!
+
+[Jigglypuff share link](http://telegram.me/jigglypuffbot)
+[Jigglypuff on github](https://github.com/NeXidan/jigglypuff)
+    '''
 }
 
 SIZE = Size(1280, 1280, 2)
