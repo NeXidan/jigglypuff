@@ -69,3 +69,6 @@ class Bot(telepot.helper.ChatHandler):
             reply_markup = consts.BOT['KEYBOARD']['HIDE']
         )
         del self.keyboard
+
+    def command_help(self, msg):
+        self.sender.sendMessage(consts.HELP_MESSAGE, parse_mode = 'Markdown')
