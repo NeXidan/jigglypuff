@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# **CLOSED** due https://github.com/AHAAAAAAA/PokemonGo-Map
+**CLOSED** due https://github.com/AHAAAAAAA/PokemonGo-Map
 
 # **Jigglypuff**
 Pokemon GO helper telegram bot http://telegram.me/jigglypuffbot
